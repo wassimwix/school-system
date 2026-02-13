@@ -29,12 +29,7 @@
                 <td>{{ student.class_name }}</td>
                 <td>{{ student.birth_year }}</td>
                 <td>
-                    {% if student.qr_code %}
-                        <img src="{{ student.qr_code.url }}" alt="QR Code" style="max-width:100px;"><br>
-                        <a href="{{ student.qr_code.url }}" download="QR_{{ student.student_code }}.png">⬇️ تحميل QR</a>
-                    {% else %}
-                        -
-                    {% endif %}
+                    <a href="{% url 'generate_qr' %}">تحميل Qr Code</a>
                 </td>
             </tr>
             {% endfor %}
