@@ -13,6 +13,7 @@ def home(request):
     return render(request, "attendance/home.html")
 
 # ================= إضافة طالب =================
+@login_required
 def add_student(request):
     message = ""
     message_class = ""
@@ -84,11 +85,12 @@ def admin_logout(request):
     logout(request)
     return redirect("home")
 
-
+@login_required
 def view_students(request):
     students = Student.objects.all()
     return render(request, "attendance/view_students.html", {"students": students})
 
+@login_required
 def generate_qr(request):
     """
     صفحة لإنشاء QR Code للطالب باستخدام الرقم المدرسي
