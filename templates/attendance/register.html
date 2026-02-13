@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل حضور / غياب</title>
+
+<link rel="stylesheet" href="{% static 'attendance/style.css' %}">
+
+<style>
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+video {
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    width: 300px;
+    height: 300px;
+    background-color: #000;
+}
+
+.input-code {
+    margin-top: 10px;
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.back-home {
+    margin-bottom: 15px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+.message {
+    margin-top: 10px;
+    font-weight: bold;
+    color: green;
+}
+</style>
+</head>
+<body>
+<div class="container register-container">
+    <img src="{% static 'attendance/logo.png' %}" alt="Logo" class="logo">
+    <h2>تسجيل حضور / غياب</h2>
+
+    <a href="{% url 'home' %}" class="back-home">🏠 العودة إلى الصفحة الرئيسية</a>
+
+    <!-- كاميرا الفيديو -->
+    <video id="video" autoplay></video>
+
+    <!-- الفورم -->
+    <form method="post" id="attendanceForm">
+        {% csrf_token %}
+        <input type="text" name="student_code" id="student_code" class="input-code"
+               placeholder="أدخل رقم الطالب أو امسح QR Code" required>
+
+        <div class="buttons">
+            <button type="submit" name="status" value="present" class="present">✅ حاضر</button>
+            <button type="submit" name="status" value="absent" class="absent">❌ غائب</button>
+        </div>
+    </form>
+
+    {% if message %}
+        <div class="message">{{ message }}</div>
+    {% endif %}
+</div>
+
+<!-- مكتبة jsQR -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const video = document.getElementById('video');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const studentInput = document.getElementById('student_code');
+
+    // تشغيل الكاميرا الخلفية
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(stream => { video.srcObject = stream; })
+        .catch(err => { console.error("خطأ في الكاميرا: ", err); });
+
+    // دالة لفحص كل إطار من الفيديو تلقائيًا
+    function scanFrame() {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+            if (code) {
+                studentInput.value = code.data;
+                console.log("تم مسح QR Code: ", code.data);
+                // لإرسال الفورم تلقائيًا عند المسح، أزل التعليق:
+                // document.getElementById('attendanceForm').submit();
+            }
+        }
+        requestAnimationFrame(scanFrame); // إعادة الفحص لكل إطار
+    }
+
+    requestAnimationFrame(scanFrame);
+});
+</script>
+</body>
+</html>

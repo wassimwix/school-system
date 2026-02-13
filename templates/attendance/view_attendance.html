@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قائمة الغيابات</title>
+<link rel="stylesheet" href="{% static 'attendance/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="logout">
+        <a href="{% url 'admin_logout' %}">تسجيل الخروج</a>
+    </div>
+
+    <h2>غيابات اليوم: {{ today }}</h2>
+
+    <a href="{% url 'home' %}" class="back-home">🏠 العودة إلى الصفحة الرئيسية</a>
+
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>الاسم الكامل</th>
+                <th>الرقم المدرسي</th>
+                <th>القسم</th>
+                <th>الحضور / الغياب</th>
+                <th>وقت الدخول</th>
+                <th>وقت الخروج</th>
+            </tr>
+            {% for att in attendances %}
+            <tr>
+                <td>{{ att.student.full_name }}</td>
+                <td>{{ att.student.student_code }}</td>
+                <td>{{ att.student.class_name }}</td>
+                <td>
+                    {% if att.time_in %}
+                        <span class="present">✅ حاضر</span>
+                    {% elif att.time_out %}
+                        <span class="absent">❌ غائب</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ att.time_in|default:"-" }}</td>
+                <td>{{ att.time_out|default:"-" }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+</body>
+</html>

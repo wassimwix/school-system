@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض التلاميذ</title>
+<link rel="stylesheet" href="{% static 'attendance/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h2>قائمة التلاميذ</h2>
+
+    <a href="{% url 'home' %}" class="back-home">🏠 العودة إلى الصفحة الرئيسية</a>
+
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>الاسم الكامل</th>
+                <th>الرقم المدرسي</th>
+                <th>القسم</th>
+                <th>سنة الميلاد</th>
+                <th>QR Code</th>
+            </tr>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.full_name }}</td>
+                <td>{{ student.student_code }}</td>
+                <td>{{ student.class_name }}</td>
+                <td>{{ student.birth_year }}</td>
+                <td>
+                    {% if student.qr_code %}
+                        <img src="{{ student.qr_code.url }}" alt="QR Code" style="max-width:100px;"><br>
+                        <a href="{{ student.qr_code.url }}" download="QR_{{ student.student_code }}.png">⬇️ تحميل QR</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+</body>
+</html>

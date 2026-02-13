@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إضافة طالب جديد</title>
+<link rel="stylesheet" href="{% static 'attendance/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <img src="{% static 'attendance/logo.png' %}" alt="Logo" class="logo">
+    <h2>تسجيل طالب جديد</h2>
+
+    <a href="{% url 'home' %}" class="back-home">🏠 العودة إلى الصفحة الرئيسية</a>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="full_name" placeholder="الاسم الكامل" required>
+        <input type="text" name="student_code" placeholder="الرقم المدرسي" required>
+        <input type="number" name="birth_year" placeholder="سنة الميلاد" required>
+        <input type="text" name="class_name" placeholder="القسم" required>
+        <button type="submit">إضافة الطالب</button>
+    </form>
+
+    {% if message %}
+        <div class="message {{ message_class }}">{{ message }}</div>
+    {% endif %}
+</div>
+</body>
+</html>

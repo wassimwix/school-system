@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام حضور وغياب التلاميذ</title>
+    <link rel="stylesheet" href="{% static 'attendance/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'attendance/logo.png' %}" alt="Logo" class="logo">
+        <h1>نظام حضور وغياب التلاميذ</h1>
+
+        <div class="nav">
+            <a href="{% url 'add_student' %}">إضافة طالب</a>
+            <a href="{% url 'register' %}">تسجيل حضور / غياب</a>
+            <a href="{% url 'view_attendance' %}">عرض الغيابات</a>
+            <a href="{% url 'view_students' %}">قائمة التلاميذ</a>
+            <a href="{% url 'generate_qr' %}">تحميل Qr Code</a>
+        </div>
+    </div>
+</body>
+</html>

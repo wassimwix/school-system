@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>توليد QR Code للطالب</title>
+<link rel="stylesheet" href="{% static 'attendance/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h2>توليد QR Code للطالب</h2>
+    <a href="{% url 'home' %}" class="back-home">🏠 العودة للصفحة الرئيسية</a>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="student_code">أدخل الرقم المدرسي للطالب:</label><br>
+        <input type="text" name="student_code" id="student_code" required><br><br>
+        <button type="submit">⬇️ تحميل QR Code</button>
+    </form>
+</div>
+</body>
+</html>
