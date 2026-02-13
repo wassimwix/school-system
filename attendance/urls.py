@@ -15,4 +15,4 @@ urlpatterns = [
     path("login/", admin_login, name="admin_login"),
     path("logout/", admin_logout, name="admin_logout"),
     path("generate_qr/", generate_qr, name="generate_qr"),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

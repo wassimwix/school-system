@@ -1,7 +1,4 @@
 from django.db import models
-import qrcode
-from io import BytesIO
-from django.core.files import File
 
 class Student(models.Model):
     full_name = models.CharField(max_length=100)
@@ -9,7 +6,8 @@ class Student(models.Model):
     birth_year = models.IntegerField()
     class_name = models.CharField(max_length=50)
 
-
+    def __str__(self):
+        return f"{self.full_name} ({self.student_code})"
 
 
 class Attendance(models.Model):
@@ -17,3 +15,6 @@ class Attendance(models.Model):
     date = models.DateField()
     time_in = models.TimeField(null=True, blank=True)
     time_out = models.TimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.student.full_name} - {self.date}"
